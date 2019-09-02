@@ -250,7 +250,7 @@ logging("Pvalues are adjusted")
 
 #LEFT JOIN INTO dataLimmaVoomAll
 #GET ALL THE INFORMATION (ID,MEAN_A,MEAN_B,LOG2FC,COUNTS) FOR DE KMERS
-system(paste("echo \"join <(zcat ", adj_pvalue,") <(zcat ", dataLimmaVoomAll," ) | awk 'function abs(x){return ((x < 0.0) ? -x : x)} {if (abs(\\$5) >=", log2fc_threshold, " && \\$2 <= ", pvalue_threshold, ") print \\$0}' | tr ' ' '\t' | gzip > ", dataLimmaVoomFiltered, "\" | bash", sep=""))
+system(paste("echo \"join <(zcat ", adj_pvalue,"|sort -n -k 1 -T ",output_tmp,") <(zcat ", dataLimmaVoomAll,"|sort -n -k 1 -T ",output_tmp," ) | awk 'function abs(x){return ((x < 0.0) ? -x : x)} {if (abs(\\$5) >=", log2fc_threshold, " && \\$2 <= ", pvalue_threshold, ") print \\$0}' | tr ' ' '\t' | gzip > ", dataLimmaVoomFiltered, "\" | bash", sep=""))
 system(paste("rm", adj_pvalue, dataLimmaVoomAll))
 
 logging("Get counts for pvalues that passed the filter")
